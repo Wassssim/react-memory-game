@@ -56,10 +56,8 @@ function App() {
   const timeoutRef = useRef<any>(null);
 
   const [cells, setCells] = useState<ICell[][]>(() => initGameGrid(4,4));
-
-  //const [state, dispatch] = useReducer<any>(reducer, {cells: initGameGrid(4,4), winText: null})
-  
-  const [winText, setWinText] = useState<string | null>(null);
+  const [moves, setMoves] = useState<number>(0);  
+  const [hasWon, setHasWon] = useState<boolean>(false);
 
 
   const hideAll = () => {
@@ -71,7 +69,7 @@ function App() {
     shownCells.current = [];
   };
 
-  const hasWon = () => {
+  const isWin = () => {
     for (const row of cells)
       for (const cell of row)
         if (cell.value !== "")
@@ -105,7 +103,7 @@ function App() {
 
     // if 2 cells have been shown
     if (shownCells.current.length === 2) {
-
+      setMoves(moves + 2);
       // if cells match
       if (newCells[shownCells.current[0][0]][shownCells.current[0][1]].value === newCells[shownCells.current[1][0]][shownCells.current[1][1]].value) {
         // show second cell
@@ -135,17 +133,26 @@ function App() {
     setCells(newCells);
   };
 
+  const handleReplay = () => {
+    setHasWon(false);
+    setCells(initGameGrid(4, 4));
+  }
+
   useEffect(() => {
-    if (hasWon())
-      setWinText("You have won!");
+    if (isWin())
+      setHasWon(true);
   }, [cells]);
 
   return (
     <div className="App">
-      { winText
+      { hasWon
         ?
-          <p>{winText}</p>
+          <>
+            <p>You have won in {moves} moves!</p>
+            <button onClick={(e) => handleReplay()}>Replay</button>
+          </>
         :
+          <>
           <div className="memory-grid">
             {cells.map((row, i) =>
               row.map((cell: ICell, j) => (
@@ -160,6 +167,8 @@ function App() {
               ))
             )}
           </div>
+          <p>{moves} Moves</p>
+          </>
       }
     </div>
   );

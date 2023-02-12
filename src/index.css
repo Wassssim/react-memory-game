@@ -12,6 +12,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --border-color: white;
+  --cell-color: gray;
 }
 
 a {
@@ -59,6 +62,8 @@ button:focus-visible {
   :root {
     color: #213547;
     background-color: #ffffff;
+    --border-color: gray;
+    --cell-color: rgb(189, 189, 189);
   }
   a:hover {
     color: #747bff;
